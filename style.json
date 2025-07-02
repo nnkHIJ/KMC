@@ -89,7 +89,7 @@
       "source": "kifuku-tiles",
       "minzoom": 0,
       "maxzoom": 24,
-      "layout": { "visibility": "visible" },
+      "layout": { "visibility": "none" },
       "paint": {
         "raster-resampling": "nearest"
       }
@@ -100,7 +100,7 @@
       "source": "Lower-tiles",
       "minzoom": 0,
       "maxzoom": 24,
-      "layout": { "visibility": "none" },
+      "layout": { "visibility": "visible" },
       "paint": {
         "raster-resampling": "nearest"
       }
