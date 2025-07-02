@@ -34,7 +34,7 @@
     "Lower-tiles": {
       "type": "raster",
       "tiles": [
-        "pmtiles://https://nnkhij.github.io/NepalMMS/data/Lower.pmtiles/{z}/{x}/{y}.png"
+        "pmtiles://https://nnkhij.github.io/KMC/data/Lower.pmtiles/{z}/{x}/{y}.png"
       ],
       "minzoom": 12,
       "maxzoom": 22,
