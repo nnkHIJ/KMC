@@ -37,7 +37,7 @@
         "pmtiles://https://nnkhij.github.io/KMC/data/Lower.pmtiles/{z}/{x}/{y}.png"
       ],
       "minzoom": 12,
-      "maxzoom": 22,
+      "maxzoom": 20,
       "tileSize": 256
     },
     "Intensity-tiles": {
