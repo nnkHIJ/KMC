@@ -25,10 +25,10 @@
     "Higher-tiles": {
       "type": "raster",
       "tiles": [
-        "pmtiles://https://nnkhij.github.io/NepalMMS/data/Higher.pmtiles/{z}/{x}/{y}.png"
+        "pmtiles://https://nnkhij.github.io/KMC/data/Higher.pmtiles/{z}/{x}/{y}.png"
       ],
       "minzoom": 12,
-      "maxzoom": 22,
+      "maxzoom": 20,
       "tileSize": 256
     },
     "Lower-tiles": {
