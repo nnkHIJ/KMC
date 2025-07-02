@@ -255,14 +255,19 @@
             });
         });
 
-        map.on('load', function() {
-            layerIds.forEach(lyrId => {
-                const chk = document.getElementById(`${lyrId}-chk`);
-                if (chk && map.getLayer(lyrId)) {
-                    map.setLayoutProperty(lyrId, 'visibility', chk.checked ? 'visible' : 'none');
-                }
-            });
-        });
+map.on('load', function() {
+    layerIds.forEach(lyrId => {
+        const chk = document.getElementById(`${lyrId}-chk`);
+        if (lyrId === 'kifuku-layer') {
+            if (map.getLayer(lyrId)) {
+                map.setLayoutProperty(lyrId, 'visibility', 'none');
+            }
+            if (chk) chk.checked = false;
+        } else if (chk && map.getLayer(lyrId)) {
+            map.setLayoutProperty(lyrId, 'visibility', chk.checked ? 'visible' : 'none');
+        }
+    });
+});
 
         const updateZoomLevel = () => {
             const zoom = map.getZoom().toFixed(2);
