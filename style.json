@@ -11,7 +11,7 @@
       "minzoom": 1,
       "maxzoom": 22,
       "tileSize": 256,
-      "attribution": "息<a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\">OpenStreetMap</a> contributors"
+      "attribution": "©<a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\">OpenStreetMap</a> contributors"
     },
     "kifuku-tiles": {
       "type": "raster",
