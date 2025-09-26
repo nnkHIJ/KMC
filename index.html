@@ -124,9 +124,10 @@
             </button>
             <div id="layers-container" class="disp-layers" style="display: none;">
                 <label><input type="checkbox" id="osm-layer-chk" checked> Open Street Map</label>
-               <!--  <label><input type="checkbox" id="trj-layer-chk"> Trajectory</label>　-->
+                <label><input type="checkbox" id="inventory-chk" checked> Inventory</label>
+                <label><input type="checkbox" id="manhole-chk" checked> Manhole -KUKL data-</label>
                 <label><input type="checkbox" id="Higher-layer-chk"> Higher data</label>
-                <label><input type="checkbox" id="Lower-layer-chk" checked> Lower data</label>
+                <label><input type="checkbox" id="Lower-layer-chk"> Lower data</label>
                <!--  <label><input type="checkbox" id="kifuku-layer-chk"> SFD</label>　-->
                <!--   <label><input type="checkbox" id="Intensity-layer-chk"> Intensity</label>　-->
                 <div id="attributes" style="margin-top:6px;"></div>
@@ -154,8 +155,8 @@
         const map = new maplibregl.Map({
             container: 'map',
             style: 'style.json', // ★ 本運用では必ずstyle.jsonが存在していることを確認してください
-            center: [85.37, 27.73],
-            zoom: 16,
+            center: [85.355, 27.723],
+            zoom: 17,
             maxZoom: 24 
         });
 
@@ -229,12 +230,16 @@
         // レイヤーリスト
         const layerIds = [
             'osm-layer',
-            <!-- 'trj-layer',　-->
-            <!-- 'kifuku-layer',　-->
             'Higher-layer',
-            'Lower-layer',
-            <!-- 'Intensity-layer'　-->
+            'Lower-layer'
         ];
+        
+        // Inventoryで制御する全レイヤー
+        const inventoryLayers = ['point-layer', 'line-layer', 'point2-layer'];
+
+        // Manholeで制御する全レイヤー
+        const manholeLayers = ['sewer-layer', 'manhole2-layer', 'manhole3-layer', 'manhole-layer'];
+        
         document.querySelector('#toggle-layers-btn').addEventListener('click', () => {
             const layersContainer = document.getElementById('layers-container');
             if (layersContainer.style.display === 'none' || layersContainer.style.display === '') {
@@ -243,31 +248,74 @@
                 layersContainer.style.display = 'none';
             }
         });
+        
+        // レイヤーの表示/非表示を切り替える関数
         const toggleLayer = (id) => {
             const isChecked = document.getElementById(`${id}-chk`).checked;
             if (map.getLayer(id)) {
                 map.setLayoutProperty(id, 'visibility', isChecked ? 'visible' : 'none');
             }
         };
+        
+        // 通常のレイヤーイベントリスナー
         layerIds.forEach(lyrId => {
             document.querySelector(`#${lyrId}-chk`).addEventListener('change', () => {
                 toggleLayer(lyrId);
             });
         });
+        
+        // Inventoryのイベントリスナー
+        document.querySelector('#inventory-chk').addEventListener('change', () => {
+            const isChecked = document.getElementById('inventory-chk').checked;
+            inventoryLayers.forEach(layerId => {
+                if (map.getLayer(layerId)) {
+                    map.setLayoutProperty(layerId, 'visibility', isChecked ? 'visible' : 'none');
+                }
+            });
+        });
 
-map.on('load', function() {
-    layerIds.forEach(lyrId => {
-        const chk = document.getElementById(`${lyrId}-chk`);
-        if (lyrId === 'kifuku-layer') {
-            if (map.getLayer(lyrId)) {
-                map.setLayoutProperty(lyrId, 'visibility', 'none');
-            }
-            if (chk) chk.checked = false;
-        } else if (chk && map.getLayer(lyrId)) {
-            map.setLayoutProperty(lyrId, 'visibility', chk.checked ? 'visible' : 'none');
-        }
-    });
-});
+        // Manholeのイベントリスナー
+        document.querySelector('#manhole-chk').addEventListener('change', () => {
+            const isChecked = document.getElementById('manhole-chk').checked;
+            manholeLayers.forEach(layerId => {
+                if (map.getLayer(layerId)) {
+                    map.setLayoutProperty(layerId, 'visibility', isChecked ? 'visible' : 'none');
+                }
+            });
+        });
+
+        map.on('load', function() {
+            // 通常のレイヤーの初期表示設定
+            layerIds.forEach(lyrId => {
+                const chk = document.getElementById(`${lyrId}-chk`);
+                if (lyrId === 'kifuku-layer') {
+                    if (map.getLayer(lyrId)) {
+                        map.setLayoutProperty(lyrId, 'visibility', 'none');
+                    }
+                    if (chk) chk.checked = false;
+                } else if (chk && map.getLayer(lyrId)) {
+                    map.setLayoutProperty(lyrId, 'visibility', chk.checked ? 'visible' : 'none');
+                }
+            });
+            
+            // Inventoryレイヤーの初期表示設定
+            const inventoryChk = document.getElementById('inventory-chk');
+            const isInventoryChecked = inventoryChk.checked;
+            inventoryLayers.forEach(layerId => {
+                if (map.getLayer(layerId)) {
+                    map.setLayoutProperty(layerId, 'visibility', isInventoryChecked ? 'visible' : 'none');
+                }
+            });
+
+            // Manholeレイヤーの初期表示設定
+            const manholeChk = document.getElementById('manhole-chk');
+            const isManholeChecked = manholeChk.checked;
+            manholeLayers.forEach(layerId => {
+                if (map.getLayer(layerId)) {
+                    map.setLayoutProperty(layerId, 'visibility', isManholeChecked ? 'visible' : 'none');
+                }
+            });
+        });
 
         const updateZoomLevel = () => {
             const zoom = map.getZoom().toFixed(2);
