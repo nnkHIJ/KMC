@@ -11,7 +11,7 @@
       "minzoom": 1,
       "maxzoom": 22,
       "tileSize": 256,
-      "attribution": "©<a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\">OpenStreetMap</a> contributors"
+      "attribution": "息<a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\">OpenStreetMap</a> contributors"
     },
     "kifuku-tiles": {
       "type": "raster",
@@ -56,6 +56,23 @@
       ],
       "minzoom": 4,
       "maxzoom": 16
+    },
+    "Inventory-source": {
+      "type": "vector",
+      "tiles": [
+        "pmtiles://https://nnkhij.github.io/KMC/data/output.pmtiles/{z}/{x}/{y}"
+      ],
+      "minzoom": 8,
+      "maxzoom": 20
+    },
+    "Manhole-source": {
+      "type": "vector",
+      "tiles": [
+        "pmtiles://https://nnkhij.github.io/KMC/data/Manhole.pmtiles/{z}/{x}/{y}"
+      ],
+      "minzoom": 8,
+      "maxzoom": 17,
+      "attribution": "<a href=\"http://sams.softavi.com\" target=\"_blank\">KUKL</a>"
     }
   },
   "layers": [
@@ -100,7 +117,7 @@
       "source": "Lower-tiles",
       "minzoom": 0,
       "maxzoom": 24,
-      "layout": { "visibility": "visible" },
+      "layout": { "visibility": "none" },
       "paint": {
         "raster-resampling": "nearest"
       }
@@ -114,6 +131,182 @@
       "layout": { "visibility": "none" },
       "paint": {
         "raster-resampling": "nearest"
+      }
+    },
+    {
+      "id": "sewer-layer",
+      "type": "line",
+      "source": "Manhole-source",
+      "source-layer": "Sewer",
+      "minzoom": 17,
+      "maxzoom": 24,
+      "paint": {
+        "line-color":"#0000ff",
+        "line-dasharray": [4, 4, 4, 4, 4, 4, 12, 4, 20, 16],
+        "line-width": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          17,1,
+          20,2
+       ]
+      }
+    },
+    {
+      "id": "manhole2-layer",
+      "type": "circle",
+      "source": "Manhole-source",
+      "source-layer": "Manhole",
+      "paint": {
+        "circle-color": "#0000FF",
+        "circle-radius": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          17,2.5,
+          20,8
+       ]
+      }
+    },
+    {
+      "id": "manhole-layer",
+      "type": "circle",
+      "source": "Manhole-source",
+      "source-layer": "Manhole",
+      "paint": {
+        "circle-color": [
+             "match",["get", "open_status"],
+             "OPENED", "#cccccc",
+             "#444444"
+        ],
+        "circle-radius": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          17,1.5,
+          20,6
+       ]
+      }
+    },
+    {
+      "id": "manhole3-layer",
+      "type": "circle",
+      "source": "Manhole-source",
+      "source-layer": "Manhole",
+      "filter": ["==", ["get", "mh_type"], "OUTLET"],
+      "paint": {
+        "circle-color":"#32CD32",
+        "circle-radius": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          17,1.5,
+          20,6
+       ]
+      }
+    },
+    {
+      "id": "line-layer",
+      "type": "line",
+      "source": "Inventory-source",
+      "source-layer": "line",
+      "paint": {
+        "line-color": [
+             "match",["get", "Color"],
+             1, "#000088",
+             4, "#e41a1c",
+             5, "#e41a1c",
+             3, "#FF8C00",
+             "#cccccc"
+        ],
+        "line-width": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          8,[
+             "match",["get", "Color"],
+             1, 1,
+             4, 0.4,
+             5, 1,
+             3, 0.25,
+             0.5
+             ],
+          20,[
+             "match",["get", "Color"],
+             1, 4,
+             4, 1.6,
+             5, 4,
+             3, 1,
+             2
+             ]
+       ]
+      }
+    },
+    {
+      "id": "point2-layer",
+      "type": "circle",
+      "source": "Inventory-source",
+      "source-layer": "point",
+      "paint": {
+        "circle-color": "#000000",
+        "circle-radius": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          16,[
+             "match",["get", "Color"],
+             2, 2.5,
+             3, 2.5,
+             6, 3,
+             112, 2,
+             3
+             ],
+          20,[
+             "match",["get", "Color"],
+             2, 15,
+             3, 11,
+             6, 16,
+             112, 9,
+             16
+             ]
+       ]
+      }
+    },
+    {
+      "id": "point-layer",
+      "type": "circle",
+      "source": "Inventory-source",
+      "source-layer": "point",
+      "paint": {
+        "circle-color": [
+             "match",["get", "Color"],
+             2, "#32CD32",
+             3, "#FF8C00",
+             6, "#cccccc",
+             112, "#FFD700",
+             "#cccccc"
+        ],
+        "circle-radius": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          16,[
+             "match",["get", "Color"],
+             2, 2,
+             3, 2,
+             6, 2.5,
+             112, 1.5,
+             2.5
+             ],
+          20,[
+             "match",["get", "Color"],
+             2, 14,
+             3, 10,
+             6, 15,
+             112, 8,
+             15
+             ]
+       ]
       }
     },
     {
